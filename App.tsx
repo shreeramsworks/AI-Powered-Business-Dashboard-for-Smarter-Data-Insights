@@ -7,7 +7,7 @@ import RevenueChart from './components/RevenueChart';
 import StatusDistributionChart from './components/StatusDistributionChart';
 import ClientTable from './components/ClientTable';
 import Chatbot from './components/Chatbot';
-import { Users, DollarSign, Target, CheckCircle } from './constants';
+import { Users, DollarSign, Target, CheckCircle, Camera } from './constants';
 
 const App: React.FC = () => {
     const [data, setData] = useState<ClientData[]>([]);
@@ -32,9 +32,9 @@ const App: React.FC = () => {
         loadData();
     }, []);
 
-    const { totalRevenue, totalClients, avgHeadshots, deliveredProjects } = useMemo(() => {
+    const { totalRevenue, totalClients, avgHeadshots, deliveredProjects, totalHeadshots } = useMemo(() => {
         if (!data || data.length === 0) {
-            return { totalRevenue: 0, totalClients: 0, avgHeadshots: 0, deliveredProjects: 0 };
+            return { totalRevenue: 0, totalClients: 0, avgHeadshots: 0, deliveredProjects: 0, totalHeadshots: 0 };
         }
 
         const totalRevenue = data.reduce((sum, item) => sum + item.Price, 0);
@@ -43,7 +43,7 @@ const App: React.FC = () => {
         const avgHeadshots = totalClients > 0 ? parseFloat((totalHeadshots / totalClients).toFixed(1)) : 0;
         const deliveredProjects = data.filter(item => item.Status === Status.Delivered).length;
         
-        return { totalRevenue, totalClients, avgHeadshots, deliveredProjects };
+        return { totalRevenue, totalClients, avgHeadshots, deliveredProjects, totalHeadshots };
     }, [data]);
 
     if (loading) {
@@ -76,10 +76,13 @@ const App: React.FC = () => {
             </header>
 
             <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <KpiCard title="Total Revenue" value={`$${totalRevenue.toLocaleString()}`} icon={<DollarSign />} />
-                <KpiCard title="Total Clients" value={totalClients.toString()} icon={<Users />} />
-                <KpiCard title="Avg. Headshots" value={avgHeadshots.toString()} icon={<Target />} />
-                <KpiCard title="Projects Delivered" value={deliveredProjects.toString()} icon={<CheckCircle />} />
+                <div className="md:col-span-2 lg:col-span-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                    <KpiCard title="Total Revenue" value={`$ ${totalRevenue.toLocaleString()}`} icon={<DollarSign />} />
+                    <KpiCard title="Total Clients" value={totalClients.toString()} icon={<Users />} />
+                    <KpiCard title="Total Headshots" value={totalHeadshots.toLocaleString()} icon={<Camera />} />
+                    <KpiCard title="Avg. Headshots" value={avgHeadshots.toString()} icon={<Target />} />
+                    <KpiCard title="Projects Delivered" value={deliveredProjects.toString()} icon={<CheckCircle />} />
+                </div>
                 
                 <div className="md:col-span-2 lg:col-span-4">
                     <RevenueChart data={data} />
