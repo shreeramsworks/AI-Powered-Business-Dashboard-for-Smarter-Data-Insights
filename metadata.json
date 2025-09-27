@@ -1,0 +1,5 @@
+{
+  "name": "Cyberpunk Sheets Dashboard",
+  "description": "A visually engaging, dark-themed dashboard that displays real-time data from a Google Sheet. It features a sleek cyberpunk aesthetic with glassmorphism effects, neon accents, and interactive data visualizations.",
+  "requestFramePermissions": []
+}
